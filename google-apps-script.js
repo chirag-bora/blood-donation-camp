@@ -8,8 +8,8 @@
  * ============================================================================
  */
 
-// Optional shared security token (matches APPS_SCRIPT_SECRET in Next.js .env)
-var INTEGRATION_SECRET = "CHANGE_ME_OR_SET_SECRET_TOKEN";
+// Shared security token matching Next.js APPS_SCRIPT_SECRET
+var INTEGRATION_SECRET = "blood_camp_secret_2026";
 
 function doPost(e) {
   var lock = LockService.getScriptLock();

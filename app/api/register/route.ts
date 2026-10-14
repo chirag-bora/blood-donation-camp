@@ -55,8 +55,12 @@ export async function POST(request: NextRequest) {
     const referenceNumber = `RD-2026-${generateRefCode()}`
 
     // 4. Send to Google Apps Script / Google Sheets
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL
-    const appsScriptSecret = process.env.APPS_SCRIPT_SECRET || ''
+    const defaultScriptUrl =
+      'https://script.google.com/macros/s/AKfycbyg9WUEVtBCeH5rt3ssdZk1_6yc2tzFryBpYP1XXxE7cZrENq3dREfVJQDEyT6MHmb2/exec'
+    const defaultSecret = 'blood_camp_secret_2026'
+
+    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL || defaultScriptUrl
+    const appsScriptSecret = process.env.APPS_SCRIPT_SECRET || defaultSecret
 
     if (!appsScriptUrl || appsScriptUrl.includes('YOUR_GOOGLE_APPS_SCRIPT_DEPLOYMENT_URL')) {
       // Configuration notice if user hasn't connected Google Sheets yet
