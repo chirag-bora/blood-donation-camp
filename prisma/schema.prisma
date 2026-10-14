@@ -1,0 +1,204 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// CAMP CONFIGURATION
+// ============================================================
+model CampSettings {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+  updatedBy   String?
+
+  @@map("camp_settings")
+}
+
+// ============================================================
+// ADMIN USERS
+// ============================================================
+model AdminUser {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  passwordHash String
+  name         String
+  role         AdminRole   @default(ORGANIZER)
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  lastLoginAt  DateTime?
+
+  auditLogs    AuditLog[]
+  statusChanges RegistrationStatusHistory[]
+
+  @@map("admin_users")
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ORGANIZER
+  VIEWER
+}
+
+// ============================================================
+// DONOR REGISTRATIONS
+// ============================================================
+model DonorRegistration {
+  id                      String      @id @default(cuid())
+  referenceNumber         String      @unique
+  
+  // Personal information
+  fullName                String
+  mobileNumber            String
+  mobileNumberNormalized  String
+  dateOfBirth             DateTime?
+  age                     Int?
+  gender                  Gender?
+  city                    String?
+  preferredLanguage       Language    @default(HINDI)
+  
+  // Donation information
+  bloodGroup              BloodGroup?
+  previousDonation        PreviousDonation @default(PREFER_NOT_TO_SAY)
+  lastDonationDate        DateTime?
+  preferredTimeSlot       TimeSlot?
+  preferredContactMethod  ContactMethod @default(PHONE_CALL)
+  
+  // Registration metadata
+  status                  RegistrationStatus @default(REGISTERED)
+  registeredAt            DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+  
+  // Consent
+  consentGiven            Boolean     @default(false)
+  consentTimestamp        DateTime?
+  consentPolicyVersion    String      @default("1.0")
+  marketingConsent        Boolean     @default(false)
+  marketingConsentTimestamp DateTime?
+  
+  // Internal notes (admin only, never shown publicly)
+  adminNotes              String?
+  
+  // Duplicate detection
+  isDuplicate             Boolean     @default(false)
+  duplicateOfId           String?
+  
+  statusHistory           RegistrationStatusHistory[]
+  auditLogs               AuditLog[]
+
+  @@index([mobileNumberNormalized])
+  @@index([bloodGroup])
+  @@index([status])
+  @@index([registeredAt])
+  @@index([referenceNumber])
+  @@map("donor_registrations")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+enum Language {
+  HINDI
+  ENGLISH
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+  UNKNOWN
+}
+
+enum PreviousDonation {
+  YES
+  NO
+  PREFER_NOT_TO_SAY
+}
+
+enum TimeSlot {
+  SLOT_9_10
+  SLOT_10_11
+  SLOT_11_12
+  SLOT_12_1
+  SLOT_1_2
+  SLOT_2_3
+  SLOT_3_4
+  SLOT_4_5
+  NO_PREFERENCE
+}
+
+enum ContactMethod {
+  PHONE_CALL
+  SMS
+}
+
+enum RegistrationStatus {
+  REGISTERED
+  CONTACTED
+  CONFIRMED
+  ATTENDED
+  DONATION_COMPLETED
+  CANCELLED
+  ANONYMIZED
+}
+
+// ============================================================
+// REGISTRATION STATUS HISTORY
+// ============================================================
+model RegistrationStatusHistory {
+  id             String             @id @default(cuid())
+  registrationId String
+  previousStatus RegistrationStatus?
+  newStatus      RegistrationStatus
+  changedAt      DateTime           @default(now())
+  changedById    String?
+  notes          String?
+
+  registration   DonorRegistration  @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+  changedBy      AdminUser?         @relation(fields: [changedById], references: [id], onDelete: SetNull)
+
+  @@index([registrationId])
+  @@map("registration_status_history")
+}
+
+// ============================================================
+// AUDIT LOG
+// ============================================================
+model AuditLog {
+  id             String    @id @default(cuid())
+  action         String
+  entityType     String
+  entityId       String?
+  adminUserId    String?
+  ipAddress      String?
+  userAgent      String?
+  metadata       Json?
+  createdAt      DateTime  @default(now())
+
+  adminUser      AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+  registration   DonorRegistration? @relation(fields: [entityId], references: [id], onDelete: SetNull)
+
+  @@index([adminUserId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
