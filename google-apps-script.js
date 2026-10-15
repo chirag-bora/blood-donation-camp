@@ -68,15 +68,15 @@ function doPost(e) {
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    // Indian phone check: 10 digits
+    // Indian phone check: optional, but if provided must be 10 digits starting with 6-9
     var cleanPhone = mobileNumber.replace(/[^0-9]/g, "");
     if (cleanPhone.length > 10 && cleanPhone.startsWith("91")) {
       cleanPhone = cleanPhone.substring(2);
     }
-    if (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
+    if (cleanPhone.length > 0 && (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone))) {
       return ContentService.createTextOutput(JSON.stringify({
         success: false,
-        error: "A valid 10-digit Indian mobile number is required."
+        error: "यदि मोबाइल नंबर दिया जा रहा है, तो 10 अंकों का मान्य नंबर होना चाहिए।"
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
@@ -146,7 +146,7 @@ function doPost(e) {
       sanitize(referenceNumber),
       istTimestamp,
       sanitize(fullName),
-      "'" + cleanPhone, // Store as text string so leading zeros and formatting remain intact
+      cleanPhone ? ("'" + cleanPhone) : "Not Provided", // Store as text string so leading zeros and formatting remain intact
       age,
       sanitize(bloodGroup),
       sanitize(locality),

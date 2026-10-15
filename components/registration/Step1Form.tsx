@@ -73,8 +73,8 @@ export function Step1Form({ defaultValues, onComplete }: Props) {
       <div>
         <label className="form-label" htmlFor="mobileNumber">
           <Phone className="w-4 h-4 inline mr-1" />
-          <span className="hindi">मोबाइल नंबर</span> <span className="text-red-500">*</span>
-          <span className="text-gray-400 font-normal ml-1">(Mobile Number)</span>
+          <span className="hindi">मोबाइल नंबर</span>
+          <span className="text-gray-400 font-normal ml-1">(Mobile Number) — Optional</span>
         </label>
         <div className="relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm font-medium">+91</span>
@@ -83,10 +83,9 @@ export function Step1Form({ defaultValues, onComplete }: Props) {
             type="tel"
             value={values.mobileNumber}
             onChange={(e) => handleChange('mobileNumber', e.target.value)}
-            placeholder="10-digit mobile number"
+            placeholder="10-digit mobile number (Optional)"
             className="form-input pl-12"
             maxLength={13}
-            required
             autoComplete="tel"
             inputMode="numeric"
           />

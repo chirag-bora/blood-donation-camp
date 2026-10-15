@@ -20,12 +20,15 @@ export const DonorRegistrationSchema = z.object({
     .max(100, 'नाम बहुत लंबा है'),
   mobileNumber: z
     .string()
-    .min(10, 'मान्य 10 अंकों का मोबाइल नंबर दर्ज करें')
-    .max(14, 'मोबाइल नंबर अमान्य है')
-    .transform(normalizePhoneNumber)
-    .refine((val) => indianMobileRegex.test(val), {
-      message: 'मान्य 10 अंकों का भारतीय मोबाइल नंबर दर्ज करें (शुरुआत 6, 7, 8 या 9 से)',
-    }),
+    .optional()
+    .default('')
+    .transform((val) => (val ? normalizePhoneNumber(val) : ''))
+    .refine(
+      (val) => !val || indianMobileRegex.test(val),
+      {
+        message: 'यदि मोबाइल नंबर दे रहे हैं, तो मान्य 10 अंकों का भारतीय मोबाइल नंबर दर्ज करें (शुरुआत 6, 7, 8 या 9 से)',
+      }
+    ),
   age: z.coerce
     .number({ invalid_type_error: 'आयु अंकों में दर्ज करें' })
     .int('आयु पूर्णांक होनी चाहिए')
@@ -72,7 +75,14 @@ export const DonorFiltersSchema = z.object({
 
 export const Step1Schema = z.object({
   fullName: z.string().min(2),
-  mobileNumber: z.string().min(10),
+  mobileNumber: z
+    .string()
+    .optional()
+    .default('')
+    .transform((val) => (val ? normalizePhoneNumber(val) : ''))
+    .refine((val) => !val || indianMobileRegex.test(val), {
+      message: 'Valid 10-digit mobile number required if provided',
+    }),
   age: z.number().optional().nullable(),
   dateOfBirth: z.string().optional().nullable(),
   gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY']).optional().nullable(),

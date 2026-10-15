@@ -45,8 +45,8 @@ export default function SingleScreenApp() {
     }
 
     const cleanPhone = mobileNumber.replace(/[^0-9]/g, '')
-    if (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone)) {
-      setErrorMessage('मान्य 10 अंकों का मोबाइल नंबर दर्ज करें (6, 7, 8 या 9 से शुरू)।')
+    if (cleanPhone.length > 0 && (cleanPhone.length !== 10 || !/^[6-9]\d{9}$/.test(cleanPhone))) {
+      setErrorMessage('यदि मोबाइल नंबर दे रहे हैं, तो मान्य 10 अंकों का नंबर दर्ज करें (6, 7, 8 या 9 से शुरू)।')
       return
     }
 
@@ -169,7 +169,7 @@ export default function SingleScreenApp() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">
-                  <span className="font-hindi">मोबाइल नंबर</span> <span className="text-blood-700">*</span>
+                  <span className="font-hindi">मोबाइल नंबर</span> <span className="text-gray-400 font-normal text-[10px]">(ऐच्छिक / Opt)</span>
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-gray-500 font-bold text-xs">
@@ -177,12 +177,11 @@ export default function SingleScreenApp() {
                   </span>
                   <input
                     type="tel"
-                    required
                     maxLength={10}
                     inputMode="numeric"
                     value={mobileNumber}
                     onChange={(e) => setMobileNumber(e.target.value.replace(/[^0-9]/g, ''))}
-                    placeholder="10 अंक"
+                    placeholder="10 अंक (Optional)"
                     className="w-full pl-9 pr-2 py-2.5 bg-red-50/20 border border-gray-200 focus:border-blood-700 focus:bg-white rounded-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-3 focus:ring-blood-700/15 transition-all font-mono text-sm font-semibold"
                   />
                 </div>
