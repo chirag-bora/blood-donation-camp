@@ -48,21 +48,19 @@ export function QRCodeGenerator({ defaultUrl, campDetails }: QRCodeGeneratorProp
 
   return (
     <div className="space-y-6">
-      {/* Vercel Deployment Guidance Banner */}
-      <div className="bg-gradient-to-r from-amber-50 to-red-50 border-2 border-amber-300/80 rounded-2xl p-5 text-amber-950 text-sm shadow-sm">
+      {/* Active Live URL Confirmation Banner */}
+      <div className="bg-gradient-to-r from-emerald-50 to-red-50 border-2 border-emerald-300/80 rounded-2xl p-5 text-emerald-950 text-sm shadow-sm">
         <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-amber-400 text-black flex items-center justify-center font-bold flex-shrink-0 mt-0.5">
-            ⚠️
+          <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold flex-shrink-0 mt-0.5">
+            ✓
           </div>
           <div>
-            <h3 className="font-extrabold text-base mb-1">
-              महत्वपूर्ण: Vercel पर डिप्लॉय करने के बाद अपना लाइव लिंक यहाँ डालें
+            <h3 className="font-extrabold text-base mb-1 text-emerald-900">
+              लाइव लिंक सक्रिय (100% स्थायी एवं विज्ञापन-मुक्त QR)
             </h3>
-            <p className="text-xs sm:text-sm text-amber-900 leading-relaxed">
-              अभी यह QR कोड डिफ़ॉल्ट रूप से <strong>http://localhost:3000</strong> पर है।
-              जैसे ही आप इस वेबसाइट को <strong>Vercel</strong> पर डिप्लॉय करेंगे, अपना लाइव Vercel URL
-              (जैसे <code>https://maa-ushtravahini-raktdaan.vercel.app</code>) नीचे दिए गए बॉक्स में पेस्ट कर दें।
-              QR कोड तुरंत आपके नए लिंक से अपडेट होकर हाई-रिज़ॉल्यूशन PNG में डाउनलोड हो जाएगा।
+            <p className="text-xs sm:text-sm text-emerald-800 leading-relaxed">
+              यह QR कोड सीधे आपके लाइव पोर्टल (<strong>https://blood-donation-camp-one.vercel.app/</strong>) से जुड़ा है।
+              इसमें कोई बाहरी थर्ड-पार्टी रीडायरेक्ट या विज्ञापन (Ads) नहीं हैं। यह कभी एक्सपायर नहीं होगा और किसी भी मोबाइल कैमरे से तुरंत खुलेगा।
             </p>
           </div>
         </div>

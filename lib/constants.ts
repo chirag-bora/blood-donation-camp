@@ -12,8 +12,8 @@ export const CAMP_CONFIG = {
   venue: 'Shri Jai Narayan Vyas Vidyalaya, Jadav Mohalla, Jodhpur, Rajasthan',
   venueHindi: 'श्री जय नारायण व्यास विद्यालय, जादव मोहल्ला, जोधपुर',
   mapUrl: 'https://maps.google.com/?q=Shri+Jai+Narayan+Vyas+Vidyalaya+Jodhpur',
-  registrationUrl: process.env.NEXT_PUBLIC_REGISTRATION_URL || 'http://localhost:3000/#register',
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  registrationUrl: process.env.NEXT_PUBLIC_REGISTRATION_URL || 'https://blood-donation-camp-one.vercel.app/',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://blood-donation-camp-one.vercel.app',
 } as const
 
 export const ORGANIZERS = [
